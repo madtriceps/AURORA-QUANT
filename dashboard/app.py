@@ -10,7 +10,9 @@ import os
 # Add project root to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from core.config import CRYPTO_PAIRS, RISK_PROFILES
+# from core.config import CRYPTO_PAIRS, RISK_PROFILES
+from core.config import CRYPTO_ASSETS,RISK_PROFILES
+
 from core.data_loader import DataLoader
 from core.indicators import (
     calculate_ema, calculate_rsi, calculate_macd, calculate_vwap
@@ -84,7 +86,12 @@ def main():
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            symbol = st.selectbox('Symbol', CRYPTO_PAIRS)
+            # symbol = st.selectbox('Symbol', CRYPTO_PAIRS)
+            symbol = st.selectbox(
+                'Symbol',
+                list(CRYPTO_ASSETS.values())
+            )
+
         
         with col2:
             aggressiveness = st.selectbox('Aggressiveness',
@@ -166,7 +173,13 @@ def main():
     elif mode == 'Analyze Market':
         st.header('Market Analysis')
         
-        symbol = st.selectbox('Symbol', CRYPTO_PAIRS)
+        # symbol = st.selectbox('Symbol', CRYPTO_PAIRS)
+        symbol = st.selectbox(
+            'Symbol',
+            list(CRYPTO_ASSETS.values())
+        )
+
+        
         
         if st.button('Analyze'):
             try:

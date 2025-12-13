@@ -5,50 +5,46 @@ from typing import List, Dict, Optional
 from datetime import datetime
 import yfinance as yf
 from core.exceptions import DataFetchError
-from core.config import BINANCE_API
+# from core.config import BINANCE_API
+from core.config import CRYPTO_DATA_PROVIDER
 import logging
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+"""Multi-asset data loading engine."""
 class DataLoader:
-    """Load market data from various sources."""
 
     @staticmethod
-    def fetch_crypto_candles(symbol: str, interval: str = "1m",
-                             days: int = 3, limit: int = 1000) -> List[Dict]:
-        """Fetch Binance crypto candles."""
+    def fetch_crypto_candles(
+        symbol: str,
+        interval: str = "1m",
+        days: int = 3
+    ) -> List[Dict]:
+        """Fetch crypto candles (geo-safe)."""
         try:
-            end_time = int(datetime.now().timestamp() * 1000)
-            start_time = end_time - (days * 24 * 60 * 60 * 1000)
+            period = f"{days}d"
+            df = yf.download(symbol, period=period, interval=interval, progress=False)
 
-            url = f"{BINANCE_API}/klines"
-            params = {
-                'symbol': symbol,
-                'interval': interval,
-                'startTime': start_time,
-                'endTime': end_time,
-                'limit': limit,
-            }
-
-            resp = requests.get(url, params=params, timeout=10)
-            if resp.status_code != 200:
-                raise DataFetchError(f"Binance API error: {resp.text}")
+            if df.empty:
+                raise DataFetchError("No crypto data returned")
 
             candles = []
-            for k in resp.json():
+            for ts, row in df.iterrows():
                 candles.append({
-                    'timestamp': int(k[0]),
-                    'open': float(k[1]),
-                    'high': float(k[2]),
-                    'low': float(k[3]),
-                    'close': float(k[4]),
-                    'volume': float(k[7]),
+                    "timestamp": int(ts.timestamp() * 1000),
+                    "open": float(row["Open"]),
+                    "high": float(row["High"]),
+                    "low": float(row["Low"]),
+                    "close": float(row["Close"]),
+                    "volume": float(row["Volume"]),
                 })
 
             return candles
+
         except Exception as e:
-            raise DataFetchError(f"Failed to fetch crypto candles: {str(e)}")
+            raise DataFetchError(f"Failed to fetch crypto candles: {e}")
+
 
     @staticmethod
     def fetch_equity_candles(symbol: str,
