@@ -9,7 +9,7 @@ requests>=2.28
 aiohttp>=3.8
 
 # IMPORTANT: yfinance compatibility
-websockets>=10,<12
+websockets==10.4
 
 # Technical Analysis / ML
 ta>=0.10
