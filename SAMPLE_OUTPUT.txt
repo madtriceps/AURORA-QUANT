@@ -1,0 +1,61 @@
+============================================================
+🚀 DUAL-MODE TRADING SIMULATOR MVP
+============================================================
+Choose a trading strategy to simulate:
+
+  1️⃣  Crypto Arbitrage (triangular, paper trading)
+  2️⃣  Intraday Momentum (technical analysis + backtesting)
+
+  0️⃣  Exit
+============================================================
+
+Select mode (0-2): 1
+
+============================================================
+🟦  CRYPTO ARBITRAGE MODE
+============================================================
+
+Starting capital (USD): $1000
+Min arbitrage threshold (%): 0.1
+Duration (minutes): 10
+
+🤖 Starting Arbitrage Simulator for 10 minutes...
+📈 Watching pairs: BTCUSDT, ETHUSDT, BNBUSDT, ADAUSDT, XRPUSDT
+⚙️  Min threshold: 0.1%
+
+✅ Executed: BTC→ETH→USDT | Profit: +0.095%
+✅ Executed: ETH→BNB→USDT | Profit: +0.112%
+
+ARBITRAGE OPPORTUNITIES DETECTED
+------------------------------------------------------------
+1. BTC→ETH→USDT | Profit: +0.095%
+2. ETH→BNB→USDT | Profit: +0.112%
+3. BTC→BNB→USDT | Profit: +0.087%
+
+============================================================
+📊 CRYPTO ARBITRAGE TRADING SUMMARY
+============================================================
+Duration: 10 minutes
+
+Initial Capital:     $1,000.00
+Final Equity:        $1,002.13
+Total P&L:           $2.13 (+0.21%)
+
+Trade Stats
+Total Trades:        3
+Closed Trades:       2
+Winning Trades:      2
+Losing Trades:       0
+Win Rate:            +100.00%
+
+Risk Metrics
+Max Drawdown:        +0.00%
+Available Cash:      $997.87
+
+============================================================
+
+📝 Your bot detected multiple arbitrage opportunities and executed 2 trade(s) with a net profit of +$2.13 (+0.21%).
+
+Run another simulation? (y/n): n
+
+👋 Thanks for using the Trading Simulator. Goodbye!

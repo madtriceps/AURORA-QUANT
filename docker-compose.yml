@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  aurora-quant:
+    build: .
+    container_name: aurora-quant
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./:/app
+    stdin_open: true
+    tty: true
+    networks:
+      - quant-network
+
+networks:
+  quant-network:
+    driver: bridge
