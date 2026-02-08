@@ -61,7 +61,7 @@ class Trade:
 
 class PaperLedger:
     """Enterprise-grade paper trading ledger with advanced metrics."""
-    
+
     def __init__(self, initial_capital: float, strategy_id: str = "default"):
         self.initial_capital = initial_capital
         self.cash = initial_capital
@@ -71,15 +71,20 @@ class PaperLedger:
         self.strategy_id = strategy_id
         self.equity_history: List[float] = [initial_capital]
         self.timestamp_history: List[datetime] = [datetime.now()]
+        # Track running peak and max drawdown correctly
+        self._peak_equity: float = initial_capital
+        self._max_drawdown_pct: float = 0.0
 
     @property
     def equity(self) -> float:
-        """Current equity = cash + unrealized PnL."""
-        unrealized_pnl = sum(
-            trade.pnl for trades in self.open_positions.values() 
-            for trade in trades if trade.status == "OPEN"
-        )
-        return self.cash + unrealized_pnl
+        """Current equity = cash + mark-to-market value of open positions."""
+        open_value = 0.0
+        for trades in self.open_positions.values():
+            for trade in trades:
+                if trade.status == "OPEN":
+                    # Value of open position at entry price (conservative)
+                    open_value += trade.entry_price * trade.quantity
+        return self.cash + open_value
 
     @property
     def total_pnl(self) -> float:
@@ -93,31 +98,50 @@ class PaperLedger:
 
     @property
     def max_drawdown(self) -> float:
-        """Maximum drawdown from peak equity."""
-        if not self.equity_history:
+        """True maximum drawdown: largest peak-to-trough drop across entire history."""
+        if len(self.equity_history) < 2:
             return 0.0
-        peak = max(self.equity_history[0], max(self.equity_history))
-        current = self.equity_history[-1]
-        return ((peak - current) / peak) * 100 if peak > 0 else 0
+        peak = self.equity_history[0]
+        worst_dd = 0.0
+        for eq in self.equity_history[1:]:
+            if eq > peak:
+                peak = eq
+            dd = ((peak - eq) / peak) * 100 if peak > 0 else 0.0
+            if dd > worst_dd:
+                worst_dd = dd
+        return worst_dd
 
     @property
     def sharpe_ratio(self, risk_free_rate: float = 0.02) -> float:
-        """Calculate Sharpe ratio (approximation)."""
+        """Calculate annualized Sharpe ratio."""
         if len(self.equity_history) < 2:
             return 0.0
-        returns = [(self.equity_history[i] - self.equity_history[i-1]) / self.equity_history[i-1] 
-                   for i in range(1, len(self.equity_history))]
-        if not returns or sum(returns) == 0:
+        returns = [
+            (self.equity_history[i] - self.equity_history[i - 1]) / self.equity_history[i - 1]
+            for i in range(1, len(self.equity_history))
+            if self.equity_history[i - 1] > 0
+        ]
+        if not returns:
             return 0.0
         avg_return = sum(returns) / len(returns)
         variance = sum((r - avg_return) ** 2 for r in returns) / len(returns)
         std_dev = variance ** 0.5
-        return (avg_return - risk_free_rate / 252) / std_dev if std_dev > 0 else 0
+        if std_dev <= 0:
+            return 0.0
+        # Annualize: assume ~252 trading periods per year
+        return (avg_return - risk_free_rate / 252) / std_dev
 
-    def update_equity(self) -> None:
-        """Update equity history."""
-        self.equity_history.append(self.equity)
+    def update_equity(self, market_price: float = None, symbol: str = None) -> None:
+        """Update equity history. Optionally mark-to-market open positions."""
+        current_eq = self.equity
+        self.equity_history.append(current_eq)
         self.timestamp_history.append(datetime.now())
+        # Update running peak / max drawdown
+        if current_eq > self._peak_equity:
+            self._peak_equity = current_eq
+        dd = ((self._peak_equity - current_eq) / self._peak_equity) * 100 if self._peak_equity > 0 else 0.0
+        if dd > self._max_drawdown_pct:
+            self._max_drawdown_pct = dd
 
     def open_position(self, symbol: str, side: str, price: float,
                       quantity: float, timestamp: datetime) -> Trade:

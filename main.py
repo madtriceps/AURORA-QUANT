@@ -123,7 +123,9 @@ def run_momentum_backtest():
         print(f"  Max Drawdown: {summary['max_drawdown']:.2f}%")
         print(f"  Sharpe Ratio: {summary['sharpe_ratio']:.2f}")
         print(f"  Profit Factor: {summary['profit_factor']:.2f}")
-        print(f"  Current Equity: ${summary['current_equity']:.2f}\n")
+        print(f"  Current Equity: ${summary['current_equity']:.2f}")
+        print(f"  Avg Win: ${summary['avg_win']:.2f}")
+        print(f"  Avg Loss: ${summary['avg_loss']:.2f}\n")
         
         # Print sample trades
         if summary['closed_trades'] > 0:

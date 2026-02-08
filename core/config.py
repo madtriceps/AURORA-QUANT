@@ -55,10 +55,25 @@ CRYPTO_ASSETS = {
 DEFAULT_SLIPPAGE = 0.002   # 0.2%
 DEFAULT_FEES = 0.001      # 0.1%
 
-RISK_PROFILES: Dict[str, float] = {
-    "conservative": 1.0,
-    "moderate": 2.5,
-    "aggressive": 5.0,
+RISK_PROFILES: Dict[str, Dict] = {
+    "conservative": {
+        "risk_per_trade_pct": 0.005,    # 0.5% of equity risked per trade
+        "atr_stop_multiple": 2.5,       # wider stop = smaller position
+        "max_single_position_pct": 0.10, # max 10% of equity in one position
+        "max_drawdown_kill": 10.0,       # kill switch at 10% drawdown
+    },
+    "moderate": {
+        "risk_per_trade_pct": 0.01,     # 1% of equity risked per trade
+        "atr_stop_multiple": 2.0,
+        "max_single_position_pct": 0.15,
+        "max_drawdown_kill": 15.0,
+    },
+    "aggressive": {
+        "risk_per_trade_pct": 0.02,     # 2% of equity risked per trade
+        "atr_stop_multiple": 1.5,       # tighter stop = bigger position but faster exit
+        "max_single_position_pct": 0.20,
+        "max_drawdown_kill": 25.0,
+    },
 }
 
 # =============================================================================
