@@ -2,17 +2,17 @@ import type { Metadata, Viewport } from "next"
 import { Inter, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
 
-const inter = Inter({ subsets: ["latin"] })
-const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] })
+const _inter = Inter({ subsets: ["latin"] })
+const _jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "AURORA QUANT - Quantitative Trading Platform",
+  title: "AURORA - Automated Crypto Trading",
   description:
-    "Professional event-driven backtester with ATR-based risk management, momentum strategies, and multi-asset support.",
+    "Institutional-grade automated trading for the crypto markets. Risk-managed. Hands-free. Join the waitlist.",
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0f",
+  themeColor: "#050507",
 }
 
 export default function RootLayout({
@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className={inter.className}>{children}</body>
+      <body className="font-sans">{children}</body>
     </html>
   )
 }

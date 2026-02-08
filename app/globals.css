@@ -7,30 +7,27 @@
   --font-sans: 'Inter', 'Inter Fallback', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'JetBrains Mono Fallback', ui-monospace, monospace;
 
-  --color-background: #0a0a0f;
-  --color-foreground: #e8e8ed;
-  --color-card: #111118;
-  --color-card-foreground: #e8e8ed;
-  --color-popover: #111118;
-  --color-popover-foreground: #e8e8ed;
-  --color-primary: #d4a050;
-  --color-primary-foreground: #0a0a0f;
-  --color-secondary: #1a1a24;
-  --color-secondary-foreground: #a0a0b0;
-  --color-muted: #14141e;
-  --color-muted-foreground: #6b6b80;
-  --color-accent: #d4a050;
-  --color-accent-foreground: #0a0a0f;
-  --color-destructive: #e04040;
+  --color-background: #050507;
+  --color-foreground: #f0f0f5;
+  --color-card: #0c0c12;
+  --color-card-foreground: #f0f0f5;
+  --color-popover: #0c0c12;
+  --color-popover-foreground: #f0f0f5;
+  --color-primary: #c8963c;
+  --color-primary-foreground: #050507;
+  --color-secondary: #141420;
+  --color-secondary-foreground: #9090a0;
+  --color-muted: #10101a;
+  --color-muted-foreground: #606078;
+  --color-accent: #c8963c;
+  --color-accent-foreground: #050507;
+  --color-destructive: #dc3545;
   --color-destructive-foreground: #ffffff;
-  --color-border: #1e1e2e;
-  --color-input: #1e1e2e;
-  --color-ring: #d4a050;
-  --color-success: #34d399;
-  --color-warning: #fbbf24;
-  --color-danger: #f87171;
+  --color-border: #1a1a28;
+  --color-input: #1a1a28;
+  --color-ring: #c8963c;
 
-  --radius: 0.5rem;
+  --radius: 0.625rem;
 }
 
 @layer base {
