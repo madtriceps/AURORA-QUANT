@@ -1,0 +1,40 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: 'Inter', 'Inter Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'JetBrains Mono Fallback', ui-monospace, monospace;
+
+  --color-background: #050507;
+  --color-foreground: #f0f0f5;
+  --color-card: #0c0c12;
+  --color-card-foreground: #f0f0f5;
+  --color-popover: #0c0c12;
+  --color-popover-foreground: #f0f0f5;
+  --color-primary: #c8963c;
+  --color-primary-foreground: #050507;
+  --color-secondary: #141420;
+  --color-secondary-foreground: #9090a0;
+  --color-muted: #10101a;
+  --color-muted-foreground: #606078;
+  --color-accent: #c8963c;
+  --color-accent-foreground: #050507;
+  --color-destructive: #dc3545;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #1a1a28;
+  --color-input: #1a1a28;
+  --color-ring: #c8963c;
+
+  --radius: 0.625rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}

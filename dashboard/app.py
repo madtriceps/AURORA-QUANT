@@ -102,36 +102,26 @@ def main():
         
         if st.button('Run Backtest'):
             st.info('Loading data...')
-            
+
             # Load data
             try:
                 candles = DataLoader.fetch_crypto_candles(symbol, '1m', days=3)
-                
+
                 if not candles:
                     st.error('No data found for symbol')
                     return
-                
-                # Run strategy
+
+                # Run strategy - it handles its own execution via the ledger
                 ledger = PaperLedger(capital, 'momentum')
                 strategy = MomentumStrategy('momentum', ledger, aggressiveness)
-                
+
                 st.info(f'Processing {len(candles)} candles...')
-                
+
                 for candle in candles:
-                    signal = strategy.on_bar(symbol, candle)
-                    
-                    if signal and signal.signal == "BUY":
-                        ledger.open_position(
-                            symbol, "BUY", candle['close'],
-                            capital / candle['close'] * 0.5,
-                            datetime.fromtimestamp(candle['timestamp'] / 1000)
-                        )
-                    elif signal and signal.signal == "SELL":
-                        ledger.close_position(
-                            symbol, candle['close'],
-                            datetime.fromtimestamp(candle['timestamp'] / 1000)
-                        )
-                
+                    # Strategy internally opens/closes positions on the ledger.
+                    # Do NOT duplicate execution here.
+                    strategy.on_bar(symbol, candle)
+
                 # Display results
                 summary = ledger.get_trades_summary()
                 
